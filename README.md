@@ -16,3 +16,6 @@ es un software contable ligero desarrollado por estudiantes, pensado para microe
 
 ### 🎯 Objetivo
 Ofrecer una herramienta accesible y práctica para la gestión contable, construida desde la academia con proyección real.
+
+### FORMATO IEEE
+https://docs.google.com/document/d/1VL9Sz7C2d2kk3xYHsk9sst3keVuYrCB0fqsFXpkuAj0/edit?usp=sharing
