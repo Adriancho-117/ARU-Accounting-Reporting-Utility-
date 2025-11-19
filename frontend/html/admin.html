@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Panel Administrativo - ARU</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style-aru.css">
+</head>
+<body>
+  <header class="header">
+    <h1 class="logo">ARU <span style="font-size: 0.6em; font-weight: 400;">Administrador</span></h1>
+    <div class="header-actions">
+      <span id="adminGreeting" class="user-name">👤 Administrador</span>
+      <button class="btn-logout" onclick="logout()">Salir</button>
+    </div>
+  </header>
+
+  <div class="contenido">
+    <div class="section">
+      <h2 class="section-title">Panel de Administración</h2>
+      <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+        Gestiona usuarios, bolsillos y pagos automáticos de la plataforma ARU.
+      </p>
+    </div>
+
+    <div class="info-box" style="margin-bottom: var(--spacing-xl);">
+      📋 Selecciona un usuario de la lista para ver sus detalles y transacciones.
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: var(--spacing-xl); margin-bottom: var(--spacing-2xl);">
+      <div>
+        <h3 class="section-title">Usuarios</h3>
+        <div id="adminUsers" class="list">
+          <div class="info-box">Cargando usuarios...</div>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="section-title" id="detailTitle">Seleccione un usuario</h3>
+        <div id="detailContent"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app-aru.js"></script>
+  <script>
+    async function loadAdminUsers() {
+      const token = localStorage.getItem('token');
+      if (!token) return alert('Debes iniciar sesión como administrador');
+      
+      try {
+        const res = await fetch('http://localhost:5000/admin/users', { 
+          headers: { Authorization: 'Bearer ' + token } 
+        });
+        
+        if (!res.ok) {
+          const data = await res.json().catch(()=>({}));
+          return alert(data.error || 'No autorizado');
+        }
+        
+        const users = await res.json();
+        const container = document.getElementById('adminUsers');
+        container.innerHTML = '';
+        
+        users.forEach(u => {
+          const el = document.createElement('div');
+          el.className = 'bolsillo-item';
+          el.style.cursor = 'pointer';
+          el.innerHTML = `
+            <div>
+              <strong>${u.nombre}</strong> 
+              <div style="font-size:0.85rem; color: var(--text-secondary); margin-top: var(--spacing-sm);">
+                ${u.correo} — <span style="background: var(--primary); color: white; padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.75rem;">${u.rol}</span>
+              </div>
+            </div>
+          `;
+          el.addEventListener('click', () => viewUser(u.id));
+          container.appendChild(el);
+        });
+      } catch (err) {
+        console.error('Error loading users:', err);
+        alert('Error al cargar los usuarios');
+      }
+    }
+
+    async function viewUser(id) {
+      const token = localStorage.getItem('token');
+      if (!token) return alert('Debes iniciar sesión como administrador');
+
+      const title = document.getElementById('detailTitle');
+      const content = document.getElementById('detailContent');
+      title.textContent = '⏳ Cargando...';
+      content.innerHTML = '';
+
+      try {
+        // Obtener bolsillos
+        const r1 = await fetch(`http://localhost:5000/admin/users/${id}/bolsillos`, { 
+          headers: { Authorization: 'Bearer ' + token } 
+        });
+        const bols = r1.ok ? await r1.json() : [];
+
+        // Obtener pagos
+        const r2 = await fetch(`http://localhost:5000/admin/users/${id}/pagos`, { 
+          headers: { Authorization: 'Bearer ' + token } 
+        });
+        const pagos = r2.ok ? await r2.json() : [];
+
+        title.textContent = `👤 Usuario #${id} — Detalles Completos`;
+        
+        let html = '<div class="section" style="margin-bottom: var(--spacing-xl);">';
+        html += '<h4 style="color: var(--primary); margin-bottom: var(--spacing-md);">💼 Bolsillos</h4>';
+        
+        if (!bols || bols.length === 0) {
+          html += '<div class="info-box">Este usuario no tiene bolsillos registrados</div>';
+        } else {
+          html += '<div class="list">';
+          bols.forEach(b => {
+            const saldo = new Intl.NumberFormat('es-CO', {style:'currency', currency:'COP'}).format(b.saldo || 0);
+            html += `
+              <div class="bolsillo-item">
+                <div>
+                  <strong>${b.nombre}</strong>
+                  <p style="margin: var(--spacing-sm) 0 0 0; font-size: 0.85rem; color: var(--text-secondary);">
+                    ${new Date(b.fecha).toLocaleDateString('es-CO')}
+                  </p>
+                </div>
+                <div class="list-item-value">${saldo}</div>
+              </div>
+            `;
+          });
+          html += '</div>';
+        }
+        html += '</div>';
+
+        html += '<div class="section">';
+        html += '<h4 style="color: var(--primary); margin-bottom: var(--spacing-md);">📅 Pagos Automáticos</h4>';
+        
+        if (!pagos || pagos.length === 0) {
+          html += '<div class="info-box">Este usuario no tiene pagos automáticos</div>';
+        } else {
+          html += '<div class="list">';
+          pagos.forEach(p => {
+            const monto = new Intl.NumberFormat('es-CO', {style:'currency', currency:'COP'}).format(p.monto || 0);
+            html += `
+              <div class="bolsillo-item">
+                <div>
+                  <strong>${p.nombre}</strong>
+                  <p style="margin: var(--spacing-sm) 0 0 0; font-size: 0.85rem; color: var(--text-secondary);">
+                    ${new Date(p.fecha).toLocaleDateString('es-CO')}
+                  </p>
+                </div>
+                <div class="list-item-value">${monto}</div>
+              </div>
+            `;
+          });
+          html += '</div>';
+        }
+        html += '</div>';
+
+        content.innerHTML = html;
+      } catch (err) {
+        console.error('Error viewing user:', err);
+        title.textContent = '❌ Error';
+        content.innerHTML = '<div class="info-box" style="border-left-color: var(--danger);">Error al cargar los detalles del usuario</div>';
+      }
+    }
+
+    // Cargar usuarios al inicializar
+    document.addEventListener('DOMContentLoaded', () => {
+      loadAdminUsers();
+    });
+  </script>
+</body>
+</html>

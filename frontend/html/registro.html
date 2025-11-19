@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrarse - ARU</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style-aru.css">
+</head>
+<body>
+
+    <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--primary), var(--primary-light)); padding: var(--spacing-lg);">
+        <div class="form-box" style="max-width: 500px; width: 100%;">
+            <div style="text-align: center; margin-bottom: var(--spacing-xl);">
+                <h1 style="color: var(--primary); margin-bottom: var(--spacing-md);">ARU</h1>
+                <p style="color: var(--text-secondary);">Crea tu cuenta para comenzar</p>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Nombre Completo</label>
+                <input type="text" id="nombre" placeholder="Juan Pérez">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Correo Electrónico</label>
+                <input type="email" id="correo" placeholder="tu@email.com">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Tipo de Cuenta</label>
+                <select id="rol">
+                    <option value="cliente">Cliente Regular</option>
+                    <option value="admin">Administrador</option>
+                    <option value="contador">Contador</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Contraseña</label>
+                <input type="password" id="contrasena" placeholder="Crea una contraseña segura">
+            </div>
+
+            <button class="btn btn-success" style="width: 100%; margin-bottom: var(--spacing-lg); font-size: 1.05rem; padding: var(--spacing-lg);" onclick="crearCuenta()">
+                Crear Cuenta
+            </button>
+
+            <div style="text-align: center;">
+                <p style="margin-bottom: 0; color: var(--text-secondary);">
+                    ¿Ya tienes cuenta? <a href="login.html" style="font-weight: 600;">Inicia sesión aquí</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function crearCuenta() {
+            const nombre = document.getElementById('nombre').value;
+            const correo = document.getElementById('correo').value;
+            const rol = document.getElementById('rol').value;
+            const contrasena = document.getElementById('contrasena').value;
+
+            if (!nombre || !correo || !contrasena) {
+                alert('Por favor completa todos los campos');
+                return;
+            }
+
+            if (contrasena.length < 6) {
+                alert('La contraseña debe tener al menos 6 caracteres');
+                return;
+            }
+
+            try {
+                const res = await fetch('http://localhost:5000/usuarios', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        nombre: nombre,
+                        correo: correo,
+                        rol: rol,
+                        contrasena_hash: contrasena
+                    })
+                });
+
+                const data = await res.json();
+                
+                if (res.ok) {
+                    alert('¡Cuenta creada exitosamente! Ahora inicia sesión.');
+                    window.location.href = 'login.html';
+                } else {
+                    alert(data.mensaje || 'Ocurrió un error al crear la cuenta');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('No se pudo conectar con el servidor');
+            }
+        }
+
+        // Permitir Enter en último campo
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('contrasena').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') crearCuenta();
+            });
+        });
+    </script>
+
+</body>
+</html>

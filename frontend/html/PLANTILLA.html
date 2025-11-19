@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARU - Template Ejemplo</title>
+    
+    <!-- Estilos CSS (ruta relativa correcta) -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Estructura Correcta del Frontend</h1>
+        
+        <div class="info-box">
+            <h2>✅ Estructura de Carpetas</h2>
+            <pre>
+frontend/
+├── html/              ← Aquí van TODOS los archivos HTML
+│   ├── index.html
+│   ├── login.html
+│   ├── registro.html
+│   ├── dashboard.html
+│   ├── bolsillos.html
+│   └── admin.html
+├── css/               ← Aquí van TODOS los estilos CSS
+│   └── style.css
+└── js/                ← Aquí van TODOS los scripts JavaScript
+    ├── config.js      ← Configuración centralizada
+    └── app.js         ← Lógica principal
+            </pre>
+        </div>
+
+        <div class="info-box">
+            <h2>📝 Cómo importar recursos en HTML</h2>
+            <pre>
+&lt;!-- En archivo: frontend/html/index.html --&gt;
+&lt;!-- Importar CSS (sube 1 nivel con ../) --&gt;
+&lt;link rel="stylesheet" href="../css/style.css"&gt;
+
+&lt;!-- Importar JavaScript (sube 1 nivel con ../) --&gt;
+&lt;script src="../js/config.js"&gt;&lt;/script&gt;
+&lt;script src="../js/app.js"&gt;&lt;/script&gt;
+            </pre>
+        </div>
+
+        <div class="info-box">
+            <h2>🔧 Configuración</h2>
+            <p>Para cambiar la URL del backend, edita <code>frontend/js/config.js</code>:</p>
+            <pre>
+const CONFIG = {
+    API_BASE: "http://localhost:5000",  ← Cambiar aquí
+    // ... otras configuraciones
+};
+            </pre>
+        </div>
+
+        <div class="info-box">
+            <h2>🚀 Para ejecutar el servidor</h2>
+            <pre>
+# En la carpeta raíz del proyecto
+cd backend
+python app.py
+
+# En otra terminal, servir el frontend
+cd frontend
+python -m http.server 8000
+            </pre>
+            <p>Acceder a: <code>http://localhost:8000/html/index.html</code></p>
+        </div>
+    </div>
+
+    <!-- Scripts JavaScript (orden importante) -->
+    <script src="../js/config.js"></script>
+    <script src="../js/app.js"></script>
+</body>
+</html>

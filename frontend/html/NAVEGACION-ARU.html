@@ -1,0 +1,315 @@
+<!-- GUÍA DE NAVEGACIÓN - PROYECTO ARU -->
+
+## 🗺️ MAPA DE NAVEGACIÓN DE LA APLICACIÓN
+
+### Página de Inicio (index.html)
+- **Ruta**: http://localhost:8000/index.html
+- **Descripción**: Landing page principal del proyecto
+- **Componentes**:
+  - Header con logo ARU
+  - Hero section con propuesta de valor
+  - Sección de características
+  - Botones de registro e inicio de sesión
+
+---
+
+### Registro (registro.html)
+- **Ruta**: http://localhost:8000/registro.html
+- **Descripción**: Formulario para crear nueva cuenta
+- **Campos**:
+  - Nombre completo
+  - Correo electrónico
+  - Tipo de cuenta (cliente, admin, contador)
+  - Contraseña
+- **Acciones**:
+  - Crear cuenta
+  - Link a login si ya tienes cuenta
+
+---
+
+### Login (login.html)
+- **Ruta**: http://localhost:8000/login.html
+- **Descripción**: Página de autenticación
+- **Campos**:
+  - Correo
+  - Contraseña
+- **Acciones**:
+  - Iniciar sesión
+  - Link a registro
+- **Usuario de prueba**:
+  - Email: admin@example.com
+  - Contraseña: admin123
+
+---
+
+### Dashboard (dashboard.html)
+- **Ruta**: http://localhost:8000/dashboard.html
+- **Descripción**: Panel principal del usuario autenticado
+- **Componentes**:
+  - Saldo total disponible
+  - Tarjetas de acceso rápido
+  - Resumen de bolsillos
+  - Lista de próximos pagos
+- **Acciones**:
+  - Ver bolsillos
+  - Crear pagos automáticos
+  - Logout
+
+---
+
+### Bolsillos (bolsillos.html)
+- **Ruta**: http://localhost:8000/bolsillos.html
+- **Descripción**: Gestión completa de bolsillos de ahorro
+- **Componentes**:
+  - Formulario para crear nuevo bolsillo
+  - Lista de bolsillos activos
+- **Campos**:
+  - Nombre del bolsillo
+  - Fecha de desembolso
+  - Monto inicial
+- **Acciones**:
+  - Crear bolsillo
+  - Ver detalles del bolsillo
+  - Volver a dashboard
+
+---
+
+### Admin Panel (admin.html)
+- **Ruta**: http://localhost:8000/admin.html
+- **Descripción**: Panel administrativo (solo para admins)
+- **Funcionalidades**:
+  - Listar todos los usuarios
+  - Ver bolsillos de cada usuario
+  - Ver pagos automáticos de cada usuario
+  - Información detallada por usuario
+- **Restricción**: Solo accesible para usuarios con rol 'admin'
+
+---
+
+## 🔄 FLUJO DE USUARIO
+
+### Flujo 1: Nuevo Usuario
+```
+index.html → registro.html → login.html → dashboard.html
+```
+
+### Flujo 2: Usuario Existente
+```
+index.html → login.html → dashboard.html
+```
+
+### Flujo 3: Gestión de Bolsillos
+```
+dashboard.html → bolsillos.html → crear bolsillo → listar bolsillos
+```
+
+### Flujo 4: Administrador
+```
+login.html (con admin) → dashboard.html → admin.html → ver usuarios
+```
+
+---
+
+## 🧭 NAVEGACIÓN PRINCIPAL
+
+Todos los archivos HTML incluyen un header con navegación consistente:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ 📌 ARU │ 📊 Dashboard │ 💰 Bolsillos │ ⏰ Pagos │ 👤 Usuario │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Links de Navegación:
+- **Logo ARU**: Vuelve a dashboard
+- **📊 Dashboard**: Panel principal
+- **💰 Bolsillos**: Gestión de bolsillos
+- **⏰ Pagos**: Crear pagos automáticos
+- **👤 Usuario**: Muestra nombre y opción logout
+
+---
+
+## 🌐 ENDPOINTS UTILIZADOS
+
+### Autenticación
+```
+POST /login
+POST /usuarios
+```
+
+### Datos Personales
+```
+GET  /saldo/<user_id>
+PUT  /saldo/<user_id>
+```
+
+### Bolsillos
+```
+POST /api/bolsillos/create
+GET  /api/bolsillos
+```
+
+### Pagos
+```
+POST /pagos_automaticos
+GET  /pagos_automaticos/<user_id>
+DELETE /pagos_automaticos/eliminar/<id>
+```
+
+### Admin
+```
+GET /admin/users
+GET /admin/users/<id>/bolsillos
+GET /admin/users/<id>/pagos
+```
+
+---
+
+## 📱 RESPONSIVE DESIGN
+
+Todos los archivos HTML son responsivos y se adaptan a:
+
+- 📱 **Mobile** (480px - 767px)
+- 📱 **Tablet** (768px - 1023px)
+- 💻 **Desktop** (1024px+)
+
+---
+
+## 🎨 TEMAS Y ESTILOS
+
+### Archivo CSS Utilizado
+- **style-aru.css** (moderno y profesional)
+
+### Paleta de Colores
+- **Primario**: #0f4c81 (Azul)
+- **Accent**: #10b981 (Verde)
+- **Fondo**: #f8fafc
+- **Texto**: #1e293b
+
+### Tipografía
+- **Font**: Poppins (Google Fonts)
+- **Pesos**: 400, 600, 700, 800
+
+---
+
+## 📊 ESTRUCTURA DE DATOS
+
+### Usuario
+```json
+{
+  "id_usuario": 1,
+  "nombre": "Juan Pérez",
+  "correo": "juan@example.com",
+  "rol": "cliente",
+  "saldo": 50000
+}
+```
+
+### Bolsillo
+```json
+{
+  "id": 1,
+  "nombre": "Vacaciones 2025",
+  "fecha": "2025-07-01",
+  "saldo": 500000
+}
+```
+
+### Pago Automático
+```json
+{
+  "id": 1,
+  "nombre": "Netflix",
+  "monto": 16900,
+  "fecha": "2025-01-15"
+}
+```
+
+---
+
+## 🔐 AUTENTICACIÓN
+
+### Token
+- Se almacena en `localStorage` como `token`
+- Se envía en header: `Authorization: Bearer <token>`
+
+### Usuario ID
+- Se almacena en `localStorage` como `usuario_id`
+- Se usa para obtener datos personales
+
+---
+
+## ⚙️ VARIABLES GLOBALES (app-aru.js)
+
+```javascript
+API_BASE = "http://localhost:5000"  // URL base del backend
+```
+
+---
+
+## 🎯 FUNCIONES PRINCIPALES (app-aru.js)
+
+### Autenticación
+- `login()` - Inicia sesión
+- `logout()` - Cierra sesión
+
+### Bolsillos
+- `cargarBolsillos()` - Carga lista de bolsillos
+- `crearBolsillo()` - Crea un nuevo bolsillo
+
+### Pagos
+- `crearPago()` - Crea un pago automático
+
+### Modales
+- `abrirModal(id)` - Abre un modal
+- `cerrarModal(id)` - Cierra un modal
+
+### Utilidades
+- `formatearMoneda(valor)` - Formatea a COP
+- `formatearFecha(fecha)` - Formatea fecha
+- `actualizarBadges()` - Actualiza contadores
+
+---
+
+## 📝 NOTAS IMPORTANTES
+
+1. **Desarrollo Local**: Asegúrate de que el backend esté corriendo en puerto 5000
+2. **CORS**: El backend tiene CORS habilitado para desarrollo
+3. **localStorage**: Se usa para almacenar tokens y IDs de usuario
+4. **Redirección**: Sin token, se redirige automáticamente a login.html
+5. **Admin**: Solo usuarios con rol 'admin' pueden acceder a admin.html
+
+---
+
+## 🚀 INICIO RÁPIDO
+
+### Terminal 1: Backend
+```bash
+cd backend-aru
+python app.py
+# En puerto 5000
+```
+
+### Terminal 2: Frontend
+```bash
+python -m http.server 8000
+# En puerto 8000
+```
+
+### Browser
+```
+http://localhost:8000/index.html
+```
+
+---
+
+## 📞 SOPORTE
+
+Si tienes preguntas sobre la navegación, revisa:
+- `README-ARU.md` - Documentación general
+- `CAMBIOS-ARU.md` - Cambios realizados
+- Archivos HTML - Comentarios en el código
+
+---
+
+**¡Navegación ARU lista para usar! 🎉**

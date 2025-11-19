@@ -1,21 +1,134 @@
-# ARU-Accounting-Reporting-Utility-
-“ARU — Aplicación ligera de contabilidad para estudiantes y microempresas.”
+# 🏦 Proyecto ARU - Gestión de Billeteras Digitales
 
-es un software contable ligero desarrollado por estudiantes, pensado para microempresas, freelancers y cualquier persona que necesite llevar sus finanzas de forma sencilla.  
+Sistema web completo de gestión de billeteras digitales con separación clara entre frontend y backend.
 
-### ✨ Características
-- Registro de ingresos y egresos con categorías personalizadas.  
-- Reportes básicos: flujo de caja y balance.  
-- Exportación de datos a Excel/PDF.  
-- Interfaz minimalista y fácil de usar.  
+## 📋 Estructura del Proyecto
 
-### 🚀 Tecnologías
-- Python (Django/Flask)  
-- SQLite (base de datos)  
-- HTML, CSS, JavaScript (frontend básico)  
+```
+proyecto-aru/
+├── frontend/                 # Aplicación web (HTML5, CSS3, JS vanilla)
+│   ├── html/                # Páginas HTML
+│   ├── css/                 # Estilos
+│   ├── js/                  # Lógica JavaScript
+│   └── LEEME.md            # Documentación frontend
+├── backend/                 # API REST (Python Flask)
+│   ├── routes/             # Endpoints de la API
+│   ├── services/           # Lógica de negocio
+│   ├── app.py             # Aplicación Flask
+│   ├── db.py              # Funciones de BD
+│   ├── requirements.txt    # Dependencias Python
+│   └── LEEME.md           # Documentación backend
+└── .gitignore             # Archivos ignorados en Git
+```
 
-### 🎯 Objetivo
-Ofrecer una herramienta accesible y práctica para la gestión contable, construida desde la academia con proyección real.
+## 🚀 Inicio Rápido
 
-### FORMATO IEEE
-https://docs.google.com/document/d/1VL9Sz7C2d2kk3xYHsk9sst3keVuYrCB0fqsFXpkuAj0/edit?usp=sharing
+### Backend (Python Flask)
+
+```bash
+cd backend
+pip install -r requirements.txt
+python app.py
+# API disponible en http://localhost:5000
+```
+
+**Requisitos:**
+- Python 3.8+
+- MySQL con base de datos `contabilidad_db`
+
+**Primeros pasos:**
+1. Configurar credenciales en `backend/db.py`
+2. Inicializar BD: `mysql -u root -p < backend/init_db.sql`
+3. Ejecutar: `python backend/app.py`
+
+### Frontend (Vanilla JavaScript)
+
+```bash
+cd frontend
+python -m http.server 8000
+# Abrir http://localhost:8000 en navegador
+```
+
+## 📚 Documentación
+
+- **[LEEME-PRIMERO.md](./LEEME-PRIMERO.md)** - Punto de entrada
+- **[GUIA-RAPIDA.md](./GUIA-RAPIDA.md)** - Setup y primeros pasos
+- **[ESTRUCTURA.md](./ESTRUCTURA.md)** - Detalles técnicos
+- **[frontend/LEEME.md](./frontend/LEEME.md)** - Documentación frontend
+- **[backend/LEEME.md](./backend/LEEME.md)** - Documentación backend
+
+## ✨ Características
+
+- ✅ Separación clara frontend/backend
+- ✅ API REST con Flask + Blueprints
+- ✅ Autenticación con tokens
+- ✅ Base de datos MySQL
+- ✅ Interfaz responsive
+- ✅ Gestión de billeteras y saldos
+- ✅ Pagos automáticos
+
+## 🛠️ Tech Stack
+
+**Frontend:**
+- HTML5, CSS3
+- JavaScript ES6+
+- Fetch API para HTTP
+
+**Backend:**
+- Python 3.8+
+- Flask Framework
+- Flask-CORS
+- MySQL Database
+
+## 📝 Endpoints Principales
+
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| POST | `/login` | Autenticación |
+| POST | `/api/usuarios` | Crear usuario |
+| GET | `/api/saldo/<id>` | Obtener saldo |
+| PUT | `/api/saldo/<id>` | Actualizar saldo |
+| GET | `/api/bolsillos` | Listar billeteras |
+| POST | `/api/bolsillos/create` | Crear billetera |
+| POST | `/api/pagos_automaticos` | Crear pago automático |
+
+## 🔐 Autenticación
+
+En desarrollo, `/login` devuelve token `"demo"`. 
+
+Headers requeridos para endpoints protegidos:
+```
+Authorization: Bearer demo
+```
+
+## 📦 Dependencias
+
+**Backend (`requirements.txt`):**
+- Flask
+- Flask-CORS
+- mysql-connector-python
+
+**Frontend:**
+- Sin dependencias externas (vanilla JS)
+
+## 🏃 Ejecutar Proyecto Completo
+
+Script automático (Windows):
+```powershell
+.\INICIAR-ARU.ps1
+```
+
+Manual:
+```bash
+# Terminal 1 - Backend
+cd backend
+python app.py
+
+# Terminal 2 - Frontend
+cd frontend
+python -m http.server 8000
+```
+
+## 📝 Licencia
+
+Proyecto personal - ARU 2024
