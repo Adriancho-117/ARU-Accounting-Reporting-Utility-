@@ -53,8 +53,15 @@ switch ($choice) {
         Write-Host "`n🗄️ Inicializando base de datos..." -ForegroundColor Cyan
         Set-Location $backendPath
         if (Test-Path "init_db.sql") {
-            sqlite3 < init_db.sql
-            Write-Host "`n✅ Base de datos inicializada." -ForegroundColor Green
+            # PowerShell no acepta la redirección '<' como en shells Unix/cmd.
+            # Usamos cmd.exe para ejecutar la redirección o avisamos si sqlite3 no está instalado.
+            if (Get-Command sqlite3 -ErrorAction SilentlyContinue) {
+                cmd.exe /c "sqlite3 < init_db.sql"
+                Write-Host "`n✅ Base de datos inicializada." -ForegroundColor Green
+            } else {
+                Write-Host "`n❌ sqlite3 no está disponible en PATH. Ejecuta manualmente:" -ForegroundColor Red
+                Write-Host "     cmd /c \"sqlite3 < init_db.sql\"" -ForegroundColor Yellow
+            }
         } else {
             Write-Host "`n❌ No se encontró init_db.sql" -ForegroundColor Red
         }
