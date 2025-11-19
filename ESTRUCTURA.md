@@ -193,7 +193,6 @@ El sistema usa **JWT (JSON Web Tokens)**:
 
 ## 🚨 Notas Importantes
 
-- ⚠️ **backend-aru/** está DEPRECADO → Usar **backend/** en su lugar
 - ⚠️ Los archivos HTML debe estar en `frontend/html/`
 - ⚠️ Los archivos CSS deben estar en `frontend/css/`
 - ⚠️ Los archivos JS deben estar en `frontend/js/`
@@ -213,11 +212,6 @@ El sistema usa **JWT (JSON Web Tokens)**:
 
 Ver **[CAMBIOS-ARU.md](./CAMBIOS-ARU.md)** para el historial completo de cambios.
 
----
-
-## 👤 Contacto
-
-Para preguntas o reportes de bugs, contacta al equipo de desarrollo.
 
 ---
 
